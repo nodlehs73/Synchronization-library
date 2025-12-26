@@ -19,7 +19,7 @@ void rwlock_init (struct rwlock* lock) {
 void lock (struct rwlock* lock) {
   const int ticket_order = atomic_fetch_add (&lock->ticket, 1);
   
-  while (ticket_order != atomic_load (&lock->serving) && atomic_load (&lock->readers) != 0)
+  while (ticket_order != atomic_load (&lock->serving) || atomic_load (&lock->readers) != 0)
     ;
 }
 
