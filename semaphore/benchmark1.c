@@ -74,7 +74,7 @@ int main() {
     double time_c = run_benchmark(test_c_sem);
     printf("Standard C Semaphore:               %.5f seconds (Counter: %ld)\n", time_c, shared_counter);
 
-    printf("\nResult: Custom is %.2fx as fast as C\n", time_c / time_custom);
+    printf("\nResult: Custom is \033[0;34m%.2fx\033[0m as fast as C\n", time_c / time_custom);
 
     sem_destroy(&c_sem);
     return 0;

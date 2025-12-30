@@ -63,7 +63,7 @@ int main()
     semaphore_init(&my_sem, Limit);
     sem_init(&c_sem, 0, Limit);
 
-    printf("Starting benchmark: %d threads, %d limit for the semaphores.\n\n", NUM_THREADS, Limit);
+    printf("Starting benchmark: %d threads, %d is the maximum number of active threads.\n\n", NUM_THREADS, Limit);
 
     double time_no_futex_custom = run_benchmark(test_custom_no_futex);
     printf("Custom Semaphore without Futex:     %.5f seconds\n", time_no_futex_custom);
@@ -74,7 +74,7 @@ int main()
     double time_c = run_benchmark(test_c_sem);
     printf("Standard C Semaphore:               %.5f seconds", time_c);
 
-    printf("\n\nResult: Custom is %.2fx as fast as C\n", time_c / time_custom);
+printf("\nResult: Custom is \033[0;34m%.2fx\033[0m as fast as C\n", time_c / time_custom);
 
     sem_destroy(&c_sem);
     return 0;
