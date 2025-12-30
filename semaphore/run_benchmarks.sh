@@ -3,7 +3,7 @@
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-
+clear
 
 echo -e "${BLUE}The first benchmark treats the semaphore like a mutex${NC}"
 gcc "benchmark1.c" -o "benchmark1" 
@@ -25,7 +25,6 @@ echo "Compiling benchmark..."
 ./"benchmark3"
 echo -e "\n"
 rm -f "benchmark3"
-
 
 
 # chmod +x run_benchmarks.sh
