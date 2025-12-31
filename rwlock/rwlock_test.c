@@ -29,7 +29,7 @@ void* modify_counter (void* data) {
   return NULL;
 }
 
-pthread_t threads[1000];
+pthread_t threads[10000];
 
 int main(int argc, char* argv[]) {
   rwlock_init (&rwmutex);
@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
     int* thread_idx = (int*) malloc (sizeof (int));
     *thread_idx = i;
     
-    printf ("%d %d\n", chance, READER_CHANCE);
     if (chance <= READER_CHANCE) {
       pthread_create (&threads[i], NULL, read_counter, (void*) thread_idx);
     } else {
