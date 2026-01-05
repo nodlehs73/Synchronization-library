@@ -3,10 +3,13 @@
 #include <time.h>
 #include <unistd.h>
 #include "custom_conditional_variables.h"
+#include "../mutex/mutex.h"
 
 #define NUM_THREADS 9000
 
-pthread_mutex_t mtx;
+struct mutex mtx;
+pthread_mutex_t posix_mtx;
+
 pthread_cond_t c_cond;
 struct conditional_variable custom_cond;
 int ready;
@@ -14,14 +17,14 @@ int ready;
 
 void *test_custom(void *arg)
 {
-    pthread_mutex_lock(&mtx);
+    mutex_lock(&mtx);
 
     while(!ready)
     {
         conditional_variable_wait(&custom_cond, &mtx);
     }
     
-    pthread_mutex_unlock(&mtx);
+    mutex_unlock(&mtx);
 
     return NULL;
 }
@@ -70,14 +73,14 @@ double run_custom_benchmark(void *(*func)(void *))
 
 void *test_c(void *arg)
 {
-    pthread_mutex_lock(&mtx);
+    pthread_mutex_lock(&posix_mtx);
 
     while(!ready)
     {
-        pthread_cond_wait(&c_cond, &mtx);
+        pthread_cond_wait(&c_cond, &posix_mtx);
     }
     
-    pthread_mutex_unlock(&mtx);
+    pthread_mutex_unlock(&posix_mtx);
 
     return NULL;
 }
@@ -130,8 +133,8 @@ int main()
 {
     conditional_variable_init(&custom_cond);
     pthread_cond_init(&c_cond, NULL);
-    pthread_mutex_init(&mtx, NULL);
-
+    mutex_init(&mtx, RAND_BACKOFF);
+    pthread_mutex_init (&posix_mtx, NULL);
     printf("Starting benchmark: %d threads.\n\n", NUM_THREADS);
 
     double time_custom = run_custom_benchmark(test_custom); ///     change here
