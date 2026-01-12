@@ -3,6 +3,7 @@
 
 #include <stdatomic.h>
 #include <stdlib.h>
+#include <stdalign.h>
 
 #define EMPTY_VALUE -123
 
@@ -19,8 +20,8 @@ struct Node * create_new_node () {
 }
 
 struct SPSC_QUEUE {
-  _Atomic(struct Node*) head;
-  _Atomic(struct Node*) tail;
+  alignas(128) _Atomic(struct Node*) head;
+  alignas(128) _Atomic(struct Node*) tail;
 };
 
 void spsc_push (struct SPSC_QUEUE* queue, int val) {
